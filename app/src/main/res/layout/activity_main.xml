@@ -9,14 +9,14 @@
         android:id="@+id/selectImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="画像を選択"
+        android:text="@string/select_image"
         android:layout_marginBottom="16dp" />
 
     <Button
         android:id="@+id/convertButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="アスキーアートに変換"
+        android:text="@string/convert_ascii_art"
         android:enabled="false"
         android:layout_marginBottom="16dp" />
 

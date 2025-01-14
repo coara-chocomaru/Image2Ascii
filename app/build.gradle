@@ -3,19 +3,20 @@ plugins {
 }
 
 android {
-    compileSdk 35
-    namespace 'com.image2ascii'
+    compileSdk = 35
+    namespace = 'com.coara.image2ascii'
 
     defaultConfig {
-        applicationId "com.image2ascii"
-        minSdk 24
-        targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        minSdk = 24
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0"
+        proguardFiles += 'proguard-rules.pro'
+        multiDexEnabled = false
     }
 
     signingConfigs {
-        release {
+        test {
             storeFile file('test.jks')
             storePassword 'test1234'
             keyAlias 'key0'
@@ -24,27 +25,18 @@ android {
     }
 
     buildTypes {
+        configureEach {
+            signingConfig = signingConfigs.test
+        }
         release {
-            signingConfig signingConfigs.release
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            debuggable false
-            zipAlignEnabled true
-            shrinkResources true
-            multiDexEnabled true
+            minifyEnabled = true
+            shrinkResources = true
         }
     }
 
-}
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
 
-repositories {
-    google()
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.material:material:1.6.0'
 }

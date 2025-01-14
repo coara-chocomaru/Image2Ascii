@@ -1,0 +1,15 @@
+# Gradle
+/.gradle/
+# Android SDK
+/local.properties
+# IntelliJ
+/.idea/
+# Gradle Build
+/app/build/
+# AGP Lint
+/build/
+# AIDE Signed APK
+/app/debug/
+/app/release/
+# VS Code
+/.vscode/
