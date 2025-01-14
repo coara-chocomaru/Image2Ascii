@@ -4,10 +4,13 @@
     <string name="cannot_get_image_path">画像のパスを取得できません</string>
     <string name="cannot_load_image">画像を読み込めません</string>
     <string name="convert_ascii_art">アスキーアートに変換</string>
+    <string name="file_not_selected">ファイルが選択されていません</string>
     <string name="file_save_failed">ファイルの保存に失敗しました</string>
-    <string name="file_save_success">ファイルが保存されました:</string>
-    <string name="need_storage_permission">ストレージアクセス権限が必要です</string>
+    <string name="file_save_success">ファイルが保存されました</string>
+    <string name="file_saved_path">保存先：</string>
+    <string name="need_storage_permission">ストレージへのアクセス権限が必要です</string>
+    <string name="save_text">ファイルに保存</string>
     <string name="select_image">画像を選択</string>
     <string name="selected_image">画像を選択しました</string>
-    <string name="storage_permission_granted">ストレージアクセス権限が許可されました</string>
+    <string name="storage_permission_denied">ストレージのアクセス権限が拒否されました</string>
 </resources>

@@ -8,10 +8,11 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,20 +25,24 @@ public class MainActivity extends Activity {
     private static final int STORAGE_PERMISSION_REQUEST_CODE = 100;
     private static final int REQUEST_CODE_PICK_IMAGE = 200;
 
-    private Button selectImageButton;
     private Button convertButton;
     private TextView asciiTextView;
-    private String selectedImagePath = "";
+    private TextView selectedFilePath;
+    private TextView savedFilePath;
+    private String selectedImagePath = null;
 
+    private static final String FILE_PREFIX = "_ascii_art.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        selectImageButton = findViewById(R.id.selectImageButton);
+        Button selectImageButton = findViewById(R.id.selectImageButton);
         convertButton = findViewById(R.id.convertButton);
         asciiTextView = findViewById(R.id.asciiTextView);
+        selectedFilePath = findViewById(R.id.selectedFilePath);
+        savedFilePath = findViewById(R.id.savedFilePath);
 
         if (!hasStoragePermission()) {
             requestStoragePermission();
@@ -48,7 +53,7 @@ public class MainActivity extends Activity {
                 pickImageFromStorage();
             } else {
                 Toast.makeText(this, getString(R.string.need_storage_permission), Toast.LENGTH_SHORT).show();
-                requestStoragePermission();
+                finish();
             }
         });
 
@@ -58,7 +63,7 @@ public class MainActivity extends Activity {
                 if (bitmap != null) {
                     String asciiArt = convertToAscii(bitmap);
                     asciiTextView.setText(asciiArt);
-                    saveAsciiArt(asciiArt);
+                    if (((Switch) findViewById(R.id.saveText)).isChecked()) saveAsciiArt(asciiArt);
                 } else {
                     Toast.makeText(this, getString(R.string.cannot_load_image), Toast.LENGTH_SHORT).show();
                 }
@@ -68,27 +73,25 @@ public class MainActivity extends Activity {
 
     // 権限があるか確認
     private boolean hasStoragePermission() {
-        return checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        return checkSelfPermission(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ? Manifest.permission.READ_MEDIA_IMAGES : Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     // 権限をリクエスト
     private void requestStoragePermission() {
         requestPermissions(
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                new String[]{Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ? Manifest.permission.READ_MEDIA_IMAGES : Manifest.permission.READ_EXTERNAL_STORAGE},
                 STORAGE_PERMISSION_REQUEST_CODE
         );
     }
 
+    /** @noinspection NullableProblems*/
     // 権限リクエストの結果を処理
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == STORAGE_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, getString(R.string.storage_permission_granted), Toast.LENGTH_SHORT).show();
-            } else {
+            if (grantResults.length > 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED)
                 Toast.makeText(this, getString(R.string.need_storage_permission), Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
@@ -109,11 +112,13 @@ public class MainActivity extends Activity {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 Uri selectedImageUri = data.getData();
                 selectedImagePath = getRealPathFromURI(selectedImageUri);
+                selectedFilePath.setText(selectedImagePath != null ? selectedImagePath : getString(R.string.cannot_get_image_path));
 
                 if (selectedImagePath != null) {
                     convertButton.setEnabled(true);
-                    Toast.makeText(this, getString(R.string.selected_image), Toast.LENGTH_SHORT).show();
                 } else {
+                    convertButton.setEnabled(false);
+                    savedFilePath.setText("");
                     Toast.makeText(this, getString(R.string.cannot_get_image_path), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -168,13 +173,16 @@ public class MainActivity extends Activity {
     private void saveAsciiArt(String asciiArt) {
         File dir = getExternalFilesDir(null);
         if (dir != null) {
-            File file = new File(dir, System.currentTimeMillis() + "_ascii_art.txt");
+            File file = new File(dir, System.currentTimeMillis() + FILE_PREFIX);
             try (FileOutputStream fos = new FileOutputStream(file)) {
                 fos.write(asciiArt.getBytes());
                 fos.flush();
-                Toast.makeText(this, getString(R.string.file_save_success) + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.file_save_success), Toast.LENGTH_SHORT).show();
+                savedFilePath.setText(getString(R.string.file_saved_path) + file.getAbsolutePath());
             } catch (IOException e) {
                 Toast.makeText(this, getString(R.string.file_save_failed), Toast.LENGTH_SHORT).show();
+                savedFilePath.setText("");
+                //noinspection CallToPrintStackTrace
                 e.printStackTrace();
             }
         }
