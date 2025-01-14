@@ -31,7 +31,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             debuggable false
             zipAlignEnabled true
-            shrinkResources true
             multiDexEnabled true
         }
     }
