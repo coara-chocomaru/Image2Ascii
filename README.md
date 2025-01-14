@@ -35,6 +35,8 @@
 - **ストレージ権限**:
   - `READ_EXTERNAL_STORAGE`: デバイスから画像ファイルを読み取るため。
   - `WRITE_EXTERNAL_STORAGE`: 生成されたASCIIアートをテキストファイルとして保存するため。
+  - `READ_MEDIA_IMAGES`: Android 13 以降に対応  
+    ※ギャラリーの画像のみ対応
 
 ## 対応画像フォーマット
 
