@@ -18,6 +18,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 21
+    
+      - name:  chmod
+        run: chmod +x ./gradlew
+      
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
