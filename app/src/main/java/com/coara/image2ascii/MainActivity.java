@@ -63,7 +63,9 @@ public class MainActivity extends Activity {
                 if (bitmap != null) {
                     String asciiArt = convertToAscii(bitmap);
                     asciiTextView.setText(asciiArt);
-                    if (((Switch) findViewById(R.id.saveText)).isChecked()) saveAsciiArt(asciiArt);
+                    if (((Switch) findViewById(R.id.saveText)).isChecked()) {
+                        saveAsciiArt(asciiArt, bitmap); // カラー情報も保存
+                    }
                 } else {
                     Toast.makeText(this, getString(R.string.cannot_load_image), Toast.LENGTH_SHORT).show();
                 }
@@ -102,7 +104,6 @@ public class MainActivity extends Activity {
         intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         startActivityForResult(intent, REQUEST_CODE_PICK_IMAGE);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -169,22 +170,55 @@ public class MainActivity extends Activity {
         return asciiArt.toString();
     }
 
-    // アスキーアートをファイルに保存
-    private void saveAsciiArt(String asciiArt) {
+    // アスキーアートをファイルに保存 (カラー情報も保存)
+    private void saveAsciiArt(String asciiArt, Bitmap bitmap) {
         File dir = getExternalFilesDir(null);
         if (dir != null) {
-            File file = new File(dir, System.currentTimeMillis() + FILE_PREFIX);
-            try (FileOutputStream fos = new FileOutputStream(file)) {
+            File asciiFile = new File(dir, System.currentTimeMillis() + FILE_PREFIX);
+            File colorFile = new File(dir, asciiFile.getName().replace(FILE_PREFIX, ".dat"));
+
+            try (FileOutputStream fos = new FileOutputStream(asciiFile)) {
                 fos.write(asciiArt.getBytes());
                 fos.flush();
+
+                // カラー情報を保存
+                saveColorData(colorFile, bitmap);
+
                 Toast.makeText(this, getString(R.string.file_save_success), Toast.LENGTH_SHORT).show();
-                savedFilePath.setText(getString(R.string.file_saved_path) + file.getAbsolutePath());
+                savedFilePath.setText(getString(R.string.file_saved_path) + asciiFile.getAbsolutePath());
             } catch (IOException e) {
                 Toast.makeText(this, getString(R.string.file_save_failed), Toast.LENGTH_SHORT).show();
                 savedFilePath.setText("");
-                //noinspection CallToPrintStackTrace
                 e.printStackTrace();
             }
+        }
+    }
+
+    // カラー情報を.datファイルに保存
+    private void saveColorData(File file, Bitmap bitmap) {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            StringBuilder colorData = new StringBuilder();
+
+            for (int y = 0; y < bitmap.getHeight(); y++) {
+                for (int x = 0; x < bitmap.getWidth(); x++) {
+                    int pixel = bitmap.getPixel(x, y);
+                    int red = (pixel >> 16) & 0xFF;
+                    int green = (pixel >> 8) & 0xFF;
+                    int blue = pixel & 0xFF;
+
+                    // ピクセル位置とRGB情報を保存
+                    colorData.append(x).append(",").append(y).append(":")
+                            .append(red).append(",")
+                            .append(green).append(",")
+                            .append(blue).append("\n");
+                }
+            }
+
+            fos.write(colorData.toString().getBytes());
+            fos.flush();
+        } catch (IOException e) {
+            Toast.makeText(this, getString(R.string.file_save_failed), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
     }
 }
