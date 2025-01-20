@@ -19,6 +19,8 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends Activity {
 
@@ -174,10 +176,14 @@ public class MainActivity extends Activity {
     private void saveAsciiArt(String asciiArt, Bitmap bitmap) {
         File dir = getExternalFilesDir(null);
         if (dir != null) {
-            
-            String baseFileName = selectedImagePath != null ? new File(selectedImagePath).getName() : System.currentTimeMillis() + FILE_PREFIX;
-            File asciiFile = new File(dir, baseFileName.replace(".jpg", FILE_PREFIX).replace(".png", FILE_PREFIX));
-            File colorFile = new File(dir, baseFileName.replace(".jpg", ".dat").replace(".png", ".dat"));
+
+            /
+            SimpleDateFormat sdf = new SimpleDateFormat("MMddHHmmss");
+            String currentDateTime = sdf.format(new Date());
+            String baseFileName = currentDateTime + "_ascii_art.txt"; 
+
+            File asciiFile = new File(dir, baseFileName);
+            File colorFile = new File(dir, baseFileName.replace(".txt", ".dat"));
 
             try (FileOutputStream fos = new FileOutputStream(asciiFile)) {
                 fos.write(asciiArt.getBytes());
@@ -186,11 +192,10 @@ public class MainActivity extends Activity {
                 
                 Switch saveColorSwitch = findViewById(R.id.saveColorSwitch); // Switchの参照取得
                 if (saveColorSwitch.isChecked()) {
-                    saveColorData(colorFile, bitmap); 
+                    saveColorData(colorFile, bitmap);
                     Toast.makeText(this, "カラー情報の保存先: " + colorFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                 }
 
-                
                 Toast.makeText(this, getString(R.string.file_save_success), Toast.LENGTH_SHORT).show();
                 savedFilePath.setText(getString(R.string.file_saved_path) + asciiFile.getAbsolutePath());
 
@@ -202,7 +207,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    
+
     private void saveColorData(File file, Bitmap bitmap) {
         try (FileOutputStream fos = new FileOutputStream(file)) {
             StringBuilder colorData = new StringBuilder();
@@ -214,7 +219,7 @@ public class MainActivity extends Activity {
                     int green = (pixel >> 8) & 0xFF;
                     int blue = pixel & 0xFF;
 
-                    // ピクセル位置とRGB情報を保存
+                
                     colorData.append(x).append(",").append(y).append(":")
                             .append(red).append(",")
                             .append(green).append(",")
