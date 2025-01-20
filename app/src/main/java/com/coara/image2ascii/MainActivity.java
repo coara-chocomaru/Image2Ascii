@@ -177,7 +177,7 @@ public class MainActivity extends Activity {
         File dir = getExternalFilesDir(null);
         if (dir != null) {
 
-            /
+            
             SimpleDateFormat sdf = new SimpleDateFormat("MMddHHmmss");
             String currentDateTime = sdf.format(new Date());
             String baseFileName = currentDateTime + "_ascii_art.txt"; 
