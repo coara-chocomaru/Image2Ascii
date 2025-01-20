@@ -174,18 +174,26 @@ public class MainActivity extends Activity {
     private void saveAsciiArt(String asciiArt, Bitmap bitmap) {
         File dir = getExternalFilesDir(null);
         if (dir != null) {
-            File asciiFile = new File(dir, System.currentTimeMillis() + FILE_PREFIX);
-            File colorFile = new File(dir, asciiFile.getName().replace(FILE_PREFIX, ".dat"));
+            
+            String baseFileName = selectedImagePath != null ? new File(selectedImagePath).getName() : System.currentTimeMillis() + FILE_PREFIX;
+            File asciiFile = new File(dir, baseFileName.replace(".jpg", FILE_PREFIX).replace(".png", FILE_PREFIX));
+            File colorFile = new File(dir, baseFileName.replace(".jpg", ".dat").replace(".png", ".dat"));
 
             try (FileOutputStream fos = new FileOutputStream(asciiFile)) {
                 fos.write(asciiArt.getBytes());
                 fos.flush();
 
-                // カラー情報を保存
-                saveColorData(colorFile, bitmap);
+                
+                Switch saveColorSwitch = findViewById(R.id.saveColorSwitch); // Switchの参照取得
+                if (saveColorSwitch.isChecked()) {
+                    saveColorData(colorFile, bitmap); 
+                    Toast.makeText(this, "カラー情報の保存先: " + colorFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                }
 
+                
                 Toast.makeText(this, getString(R.string.file_save_success), Toast.LENGTH_SHORT).show();
                 savedFilePath.setText(getString(R.string.file_saved_path) + asciiFile.getAbsolutePath());
+
             } catch (IOException e) {
                 Toast.makeText(this, getString(R.string.file_save_failed), Toast.LENGTH_SHORT).show();
                 savedFilePath.setText("");
@@ -194,7 +202,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    // カラー情報を.datファイルに保存
+    
     private void saveColorData(File file, Bitmap bitmap) {
         try (FileOutputStream fos = new FileOutputStream(file)) {
             StringBuilder colorData = new StringBuilder();
