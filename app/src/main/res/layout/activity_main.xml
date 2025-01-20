@@ -44,6 +44,13 @@
         android:checked="true"
         android:text="@string/save_text" />
 
+    
+    <Switch
+        android:id="@+id/saveColorSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/save_color" />
 
     <TextView
         android:id="@+id/savedFilePath"
