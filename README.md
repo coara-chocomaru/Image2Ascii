@@ -6,7 +6,7 @@
 
 - デバイスのストレージから画像を選択し、画像をASCIIアートに変換
 - 生成されたASCIIアートを `.txt` ファイルとして  
-  内部ストレージ(`/sdcard/Android/data/com.image2ascii/files/`)に保存
+  内部ストレージ(`/sdcard/Android/data/com.coara.image2ascii/files/`)に保存
 - アプリ内で直接ASCIIアートを表示  
   ※端末の画面密度によってはレイアウトが崩れます
 
