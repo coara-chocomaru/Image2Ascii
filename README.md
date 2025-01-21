@@ -25,7 +25,7 @@
     - ASCIIアートがアプリ内に表示されます。
 
 4. **ASCIIアートを保存**:
-    - ファイルに保存をする場合、ASCIIアートは `/sdcard/Android/data/com.image2ascii/files/` に `.txt` ファイルとして保存されます。
+    - ファイルに保存をする場合、ASCIIアートは `/sdcard/Android/data/com.coara.image2ascii/files/` に `.txt` ファイルとして保存されます。
     - 保存場所はボタンの下に表示されます。
 
 ## 権限
