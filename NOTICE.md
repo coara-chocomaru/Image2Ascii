@@ -8,8 +8,8 @@ Android SDKはGoogle LLCによって提供されており
   [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
 
 - **Android SDKライセンス**: Android SDKに関する詳細なライセンス情報は、こちらで確認できます:  
-  [Android SDKライセンス情報](https://developer.android.com/studio#license)
-
+  - Android SDKに関する詳細なライセンス情報は下記を参照してください。
+  - [Android SDKライセンス情報](https://developer.android.com/license)
 ## 商標通知
 
 - **Android™** はGoogle LLCの商標です。
