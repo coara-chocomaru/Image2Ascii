@@ -57,3 +57,5 @@ Apache License, Version 2.0
 使用ライブリについては下記のNOTICEをご覧ください。
 #####
 [NOTICE](./NOTICE.md)
+- Copyright 2025 coara-chocomaru
+
