@@ -1,6 +1,7 @@
 ## 基本的なライセンス情報
 
-このアプリはAndroid Software Development Kit (SDK) を使用して開発されています。  
+このアプリ[com.coara.image2ascii]は      
+Android Software Development Kit (SDK) を使用して開発されています。  
 Android SDKはGoogle LLCによって提供されており  
 オープンソースのApache License 2.0のもとで利用可能です。
 
