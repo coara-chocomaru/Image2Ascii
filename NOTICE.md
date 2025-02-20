@@ -13,5 +13,6 @@ Android SDKはGoogle LLCによって提供されており
 ## 商標通知
 
 - **Android™** はGoogle LLCの商標です。
-- Copyright 2025 coara-chocomaru
+---
+Copyright 2025 coara-chocomaru
 
